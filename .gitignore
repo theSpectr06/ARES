@@ -29,3 +29,9 @@ data-pipeline/output/*.npy
 # QGIS temporary backups
 *.qgz~
 *.qgs~
+
+# QGIS inspection projects
+qgis/
+
+# Generated route exports
+data-pipeline/output/*.gpkg
