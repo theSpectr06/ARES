@@ -1,0 +1,23 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Testing and linting
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+
+# Raw datasets and large intermediates
+data-pipeline/raw/*
+!data-pipeline/raw/.gitkeep
+
+data-pipeline/output/*.tif
+data-pipeline/output/*.npy
