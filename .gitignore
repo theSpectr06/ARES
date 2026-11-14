@@ -21,3 +21,11 @@ data-pipeline/raw/*
 
 data-pipeline/output/*.tif
 data-pipeline/output/*.npy
+
+# GDAL auxiliary metadata and overview files
+*.aux.xml
+*.ovr
+
+# QGIS temporary backups
+*.qgz~
+*.qgs~
