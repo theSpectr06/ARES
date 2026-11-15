@@ -2,7 +2,7 @@
   <img src="web/assets/banner.png" alt="ARES — Advanced Route Exploration System" width="100%">
 </p>
 
-# ARES — Advanced Route Exploration System
+# ARES - Advanced Route Exploration System
 
 [![NASA Space Apps](https://img.shields.io/badge/NASA-Space%20Apps%202026-0B3D91?logo=nasa&logoColor=white)](https://www.spaceappschallenge.org/)
 [![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
@@ -10,9 +10,14 @@
 [![NumPy](https://img.shields.io/badge/NumPy-computing-013243?logo=numpy&logoColor=white)](https://numpy.org/)
 [![SciPy](https://img.shields.io/badge/SciPy-scientific%20computing-8CAAE6?logo=scipy&logoColor=white)](https://scipy.org/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?logo=leaflet&logoColor=white)](https://leafletjs.com/)
-[![Tests](https://img.shields.io/badge/tests-79%20passing-brightgreen?logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Tests](https://img.shields.io/badge/tests-80+%20passing-brightgreen?logo=pytest&logoColor=white)](https://docs.pytest.org/)
 
 **Terrain-aware surface route planning and geospatial exploration system for future human Extravehicular Activities (EVA) and robotic reconnaissance on Mars.**
+
+## Quick Project Links
+
+- **Live Application:** [Launch ARES](https://ares-web-coral.vercel.app/)
+- **Project Demonstration (PDF):** [pdf](demo/ARES_demo.pdf) | [pptx](demo/ARES_demo.pptx)
 
 ---
 
