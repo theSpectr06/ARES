@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0e13">
+    <meta name="description" content="ARES terrain-aware EVA route planning prototype for Jezero Crater.">
+    <title>ARES — Mission Planner</title>
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">A</div>
+                <div class="brand-text">
+                    <span class="brand-name">ARES</span>
+                    <span class="brand-subtitle">ADVANCED ROUTE EXPLORATION SYSTEM</span>
+                </div>
+            </div>
+            <div class="mission-context">
+                <span class="status-indicator"></span>
+                <span>JEZERO CRATER</span>
+                <span class="context-divider">/</span>
+                <span class="muted">MARS SURFACE OPERATIONS</span>
+            </div>
+            <div class="system-status">
+                <span class="status-label">SYSTEM</span>
+                <span class="status-value">INITIALIZING</span>
+            </div>
+        </header>
+
+        <main class="workspace">
+            <aside class="sidebar left-panel">
+                <div class="panel-heading">
+                    <span class="eyebrow">MISSION CONTROL</span>
+                    <h2>Mission planner</h2>
+                </div>
+
+                <section class="panel-section">
+                    <div class="section-heading">
+                        <h3>Mission area</h3>
+                        <span class="section-index">01</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">REGION</span>
+                        <span class="field-value">Jezero Crater</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">TERRAIN DATA</span>
+                        <span class="field-value">HiRISE DTM · 1 m/px</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">IMAGERY</span>
+                        <span class="field-value">HiRISE Orthoimage</span>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <div class="section-heading">
+                        <h3>Map layers</h3>
+                        <span class="section-index">02</span>
+                    </div>
+                    <div class="layer-list">
+                        <label class="layer-option">
+                            <input id="layer-imagery" type="checkbox" checked>
+                            <span class="layer-swatch imagery"></span>
+                            <span>Surface imagery</span>
+                        </label>
+                        <label class="layer-option">
+                            <input id="layer-footprint" type="checkbox" checked>
+                            <span class="layer-swatch footprint"></span>
+                            <span>Mission-area footprint</span>
+                        </label>
+                        <label class="layer-option">
+                            <input id="layer-cost" type="checkbox">
+                            <span class="layer-swatch cost"></span>
+                            <span>Traversal cost</span>
+                        </label>
+                        <label class="layer-option">
+                            <input id="layer-route" type="checkbox" checked>
+                            <span class="layer-swatch route"></span>
+                            <span>Planned route</span>
+                        </label>
+                    </div>
+                    <div class="opacity-control" id="cost-opacity-control">
+                        <label for="cost-opacity">
+                            <span>Cost opacity</span>
+                            <output id="cost-opacity-value" for="cost-opacity">72%</output>
+                        </label>
+                        <input id="cost-opacity" type="range" min="10" max="100" value="72" step="1">
+                    </div>
+                    <p class="panel-note">
+                        Cost and route layers are available in the mission-area view.
+                        The footprint marks the detailed crop on the regional map.
+                    </p>
+                </section>
+
+                <section class="panel-section">
+                    <div class="section-heading">
+                        <h3>Route planning</h3>
+                        <span class="section-index">03</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">ROUTE STATUS</span>
+                        <span class="field-value" id="route-status">Loading route data</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">PATHFINDING</span>
+                        <span class="field-value">A* · 8-connected grid</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">EXPANDED CELLS</span>
+                        <span class="field-value" id="expanded-cells">—</span>
+                    </div>
+                </section>
+            </aside>
+
+            <section class="map-workspace">
+                <div class="map-toolbar">
+                    <div>
+                        <span class="eyebrow">SURFACE NAVIGATION</span>
+                        <h2 id="map-title">Regional overview</h2>
+                    </div>
+                    <div class="view-controls">
+                        <button id="view-regional" class="view-button active" type="button" aria-pressed="true">REGIONAL</button>
+                        <button id="view-detail" class="view-button" type="button" aria-pressed="false">MISSION AREA</button>
+                    </div>
+                </div>
+
+                <div id="map" class="map-container" aria-label="Interactive Jezero Crater terrain map">
+                    <div id="cost-legend" class="cost-legend" hidden>
+                        <div class="legend-title">NORMALIZED TRAVERSAL COST</div>
+                        <div class="legend-gradient"></div>
+                        <div class="legend-labels"><span>LOW</span><span>HIGH</span></div>
+                    </div>
+                    <div id="map-hint" class="map-hint">Click the outlined footprint to open the mission area</div>
+                </div>
+
+                <div class="map-footer">
+                    <span id="map-coordinate-label">COORDINATE SYSTEM: MARS EQUIRECTANGULAR</span>
+                    <span id="map-coordinate-readout" aria-live="polite">X — · Y —</span>
+                    <span id="map-view-label">REGIONAL IMAGE PIXELS</span>
+                </div>
+            </section>
+
+            <aside class="sidebar right-panel">
+                <div class="panel-heading">
+                    <span class="eyebrow">TERRAIN ANALYSIS</span>
+                    <h2>Route metrics</h2>
+                </div>
+
+                <section class="panel-section">
+                    <div class="section-heading">
+                        <h3>Traversal model</h3>
+                        <span class="section-index">04</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">COST COMPONENTS</span>
+                        <span class="field-value">Slope + roughness</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">SLOPE LIMIT</span>
+                        <span class="field-value">30°</span>
+                    </div>
+                    <div class="info-block">
+                        <span class="field-label">PATHFINDING MODEL</span>
+                        <span class="field-value">Terrain-weighted A*</span>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <div class="section-heading">
+                        <h3>Route profile</h3>
+                        <span class="section-index">05</span>
+                    </div>
+                    <div id="elevation-profile" class="empty-state">
+                        <span class="empty-state-icon">⌁</span>
+                        <span>Loading elevation profile.</span>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <div class="section-heading">
+                        <h3>Mission notes</h3>
+                        <span class="section-index">06</span>
+                    </div>
+                    <p class="panel-note">
+                        Terrain cost represents modelled traversal difficulty. It is not a
+                        complete hazard-detection or astronaut-safety model. Low cost does
+                        not mean hazard-free terrain.
+                    </p>
+                </section>
+            </aside>
+        </main>
+
+        <footer class="routebar">
+            <div class="routebar-heading">
+                <span class="status-indicator"></span>
+                <span>ROUTE SUMMARY</span>
+            </div>
+            <div class="route-metric">
+                <span class="metric-label">DISTANCE</span>
+                <span class="metric-value" id="metric-distance">— <small>m</small></span>
+            </div>
+            <div class="route-metric">
+                <span class="metric-label">MODELLED COST</span>
+                <span class="metric-value" id="metric-cost">— <small>m-eq</small></span>
+            </div>
+            <div class="route-metric">
+                <span class="metric-label">GRID CELLS</span>
+                <span class="metric-value" id="metric-cells">—</span>
+            </div>
+            <div class="routebar-status" id="routebar-status">AWAITING MAP INITIALIZATION</div>
+        </footer>
+    </div>
+
+    <script src="vendor/leaflet/leaflet.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
