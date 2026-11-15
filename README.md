@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="web/assets/banner.png" alt="ARES — Advanced Route Exploration System" width="100%">
+</p>
+
 # ARES — Advanced Route Exploration System
 
 [![NASA Space Apps](https://img.shields.io/badge/NASA-Space%20Apps%202026-0B3D91?logo=nasa&logoColor=white)](https://www.spaceappschallenge.org/)
@@ -10,7 +14,23 @@
 
 **Terrain-aware surface route planning and geospatial exploration system for future human Extravehicular Activities (EVA) and robotic reconnaissance on Mars.**
 
+---
+
 ARES was developed as an exploration operations prototype for the **NASA Space Apps Challenge 2026**, focused on the **Jezero Crater and western inlet region (Neretva Vallis)** on Mars ($77^\circ\text{E}, 18^\circ\text{N}$). The system ingests sub-meter orbital elevation and optical data, models surface traversability constraints (slopes, roughness, impassable hazards), and computes optimal exploration traverses between mission basecamp staging areas and high-priority geological science destinations.
+
+Key challenge objectives addressed:
+
+- **Localized Surface Mapping:** Provides a high-resolution, 1 m/pixel tactical exploration environment rather than relying exclusively on regional orbital maps.
+- **Multi-Source Data Integration:** Combines HiRISE topographic and optical products with geological mapping references and Perseverance rover observations.
+- **Terrain-Aware Navigation:** Models slope and surface roughness to identify hazardous terrain and generate traversable routes between mission staging areas and scientific targets.
+- **Science-Driven Exploration:** Connects geological destinations with scientific objectives, orbital morphology evidence, and relevant rover observations.
+- **Mission Situational Awareness:** Provides route telemetry, spatial coordinates, elevation profiles, and interactive terrain visualization through a unified mission operations interface.
+
+ARES demonstrates how existing planetary science datasets can be brought together into a localized exploration environment to support future human and robotic reconnaissance missions.
+
+Developed by **Team Thestrals**
+- **Sreegovind P**
+- **Suraj Krishna K**
 
 ---
 
@@ -37,30 +57,28 @@ ARES was developed as an exploration operations prototype for the **NASA Space A
 
 ARES is structured as two decoupled, high-performance systems:
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        ARES Geospatial Pipeline                        │
-│   (Python 3.12 · Rasterio · GDAL · NumPy · SciPy · Fiona · Shapely)    │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-       ┌────────────────────────────┼───────────────────────────┐
-       ▼                            ▼                           ▼
-[ terrain.py ]              [ pathfind.py ]             [ web_export.py ]
-Slope & Detrended          8-Connected Grid A*        High-res detail crops,
-Roughness surfaces         Out-of-core BlockCache     raster heatmaps, JSON
-Max 30° slope limit        Octile heuristic           manifests & profiles
-       │                            │                           │
-       └────────────────────────────┼───────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                   ARES Mission Operations Web Client                   │
-│         (Vanilla ES6 Modules · HTML5 Canvas · Leaflet GIS · CSS3)       │
-├───────────────────────────────────┬────────────────────────────────────┤
-│ Full-bleed edge-to-edge viewport  │ Dynamic 250m/500m metric grid      │
-│ Floating telemetry & model cards  │ Science dossier catalogue modal    │
-│ Regional & Tactical view modes    │ Real-time elevation profile chart  │
-└────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    A["ARES Geospatial Pipeline<br/>Python · Rasterio · GDAL · NumPy · SciPy"]
+
+    A --> B["Terrain Analysis<br/>Slope & Roughness · Traversal Cost"]
+    A --> C["A* Pathfinding<br/>8-Connected Search · BlockCache"]
+    A --> D["Web Asset Export<br/>Maps · Heatmaps · Routes · JSON"]
+
+    B --> E
+    C --> E
+    D --> E
+
+    E["ARES Mission Operations Interface<br/>Leaflet · HTML5 Canvas · Vanilla JavaScript"]
+
+    E --> F["Regional & Tactical Maps · Telemetry · Science Catalogue · Elevation Profiles"]
+
+    style A fill:#172b3a,stroke:#527b99,color:#fff
+    style E fill:#203b32,stroke:#65a68a,color:#fff
+    style B fill:#252d38,stroke:#526a83,color:#fff
+    style C fill:#252d38,stroke:#526a83,color:#fff
+    style D fill:#252d38,stroke:#526a83,color:#fff
+    style F fill:#252d38,stroke:#526a83,color:#fff
 ```
 
 1. **Geospatial Processing & Pathfinding Core (`src/ares_pipeline/`)**:
@@ -189,6 +207,40 @@ ARES is an experimental mission planning prototype developed for scientific anal
 - **Geological Mapping & In-Situ Science References**:
   - Stack et al. (2020), *Photogeologic Map of the Perseverance Rover Field Site in Jezero Crater*, Space Sci Rev, [doi:10.1007/s11214-020-00739-x](https://doi.org/10.1007/s11214-020-00739-x).
   - Jones et al. (2026) / Farley et al., Mars 2020 Perseverance science team traverse reports, Neretva Vallis and Bright Angel investigations.
+
+---
+
+## Integrated Science Data
+
+ARES organizes planetary observations into complementary information layers:
+
+| Data Category | Source | Application in ARES |
+|---|---|---|
+| Topographic | HiRISE DTM | Elevation, slope and terrain analysis |
+| Optical | HiRISE Orthoimage | Surface morphology and visual terrain inspection |
+| Geological | Published Jezero geological mapping | Identification and interpretation of scientific targets |
+| Rover Observations | Mars 2020 Perseverance | In-situ geological context and exploration references |
+| Terrain Confidence | HiRISE Confidence Mosaic | Supporting terrain data quality assessment |
+
+The integrated datasets provide complementary perspectives on the exploration environment, connecting orbital surface measurements with geological interpretation and ground-level scientific observations.
+
+**Future Data Integration:** CRISM hyperspectral observations and THEMIS thermal infrared datasets have been identified as potential additional sources for mineralogical and thermal context. Their spatial coverage and product-level verification are deferred and are not currently incorporated into the operational interface.
+
+---
+
+## Human Exploration Context
+
+ARES is designed around the operational requirements of future crewed Mars surface excursions.
+
+The mission planning workflow considers:
+
+- **Traverse Safety:** Avoidance of steep slopes and high-roughness terrain using orbital-derived traversability models.
+- **Mission Planning:** Precomputed routes connecting a centralized staging basecamp with scientifically significant destinations.
+- **Scientific Decision Support:** Geological dossiers provide contextual information and exploration objectives before reaching a destination.
+- **Terrain Awareness:** Elevation cross-sections and spatial overlays help explorers understand the topographic characteristics of planned traverses.
+- **Orbital-to-Surface Context:** Regional rover imagery and scientific observations provide additional context for interpreting geological features encountered during exploration.
+
+The current implementation is a planning and visualization prototype. It does not provide live environmental monitoring, real-time hazard detection, spacesuit mobility simulation, or certified astronaut navigation.
 
 ---
 
