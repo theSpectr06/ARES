@@ -23,7 +23,7 @@ import math
 from collections import OrderedDict
 from dataclasses import dataclass
 from pathlib import Path
-
+import time
 import numpy as np
 import rasterio
 
@@ -234,6 +234,8 @@ def find_route(
     g_distance: dict[tuple[int, int], float] = {start: 0.0}  # accumulated real distance
     visited: set[tuple[int, int]] = set()
     cells_expanded = 0
+    started_at = time.perf_counter()
+    progress_interval = 100_000
 
     while open_set:
         _, current = heapq.heappop(open_set)
@@ -242,6 +244,14 @@ def find_route(
         visited.add(current)
         cells_expanded += 1
 
+        if cells_expanded % progress_interval == 0:
+            elapsed = time.perf_counter() - started_at
+            print(
+                f"A*: expanded={cells_expanded:,}, "
+                f"open_set={len(open_set):,}, "
+                f"elapsed={elapsed:.1f}s",
+                flush=True,
+            )
         if current == goal:
             path = [current]
             while current in came_from:
@@ -258,25 +268,53 @@ def find_route(
         r, c = current
         current_terrain_cost = cache.get(r, c)
 
-        for dr, dc, step_distance in NEIGHBOR_OFFSETS:
-            neighbor = (r + dr, c + dc)
+        # Read each neighbour exactly once. Reuse these values for
+        # passability, diagonal corner checks, and traversal costs.
+        neighbor_costs = [
+            cache.get(r + dr, c + dc)
+            for dr, dc, _ in NEIGHBOR_OFFSETS
+        ]
 
-            if not is_passable(cache, *neighbor):
+        for index, (dr, dc, step_distance) in enumerate(NEIGHBOR_OFFSETS):
+            neighbor = (r + dr, c + dc)
+            neighbor_terrain_cost = neighbor_costs[index]
+
+            # NaN means impassable or outside the raster.
+            if math.isnan(neighbor_terrain_cost):
                 continue
+
+            # Diagonal movement requires both flanking cardinal cells
+            # to be passable.
             if dr != 0 and dc != 0:
-                if diagonal_move_blocked_by_corner(cache, r, c, dr, dc):
+                row_flank_index = 0 if dr < 0 else 1
+                col_flank_index = 2 if dc < 0 else 3
+
+                if (
+                    math.isnan(neighbor_costs[row_flank_index])
+                    or math.isnan(neighbor_costs[col_flank_index])
+                ):
                     continue
 
-            neighbor_terrain_cost = cache.get(*neighbor)
-            average_cell_cost = (current_terrain_cost + neighbor_terrain_cost) / 2.0
-            step_cost = step_distance * (1.0 + terrain_weight * average_cell_cost)
+            average_cell_cost = (
+                current_terrain_cost + neighbor_terrain_cost
+            ) / 2.0
+
+            step_cost = step_distance * (
+                1.0 + terrain_weight * average_cell_cost
+            )
 
             tentative_g_cost = g_cost[current] + step_cost
+
             if neighbor not in g_cost or tentative_g_cost < g_cost[neighbor]:
                 g_cost[neighbor] = tentative_g_cost
-                g_distance[neighbor] = g_distance[current] + step_distance
+                g_distance[neighbor] = (
+                    g_distance[current] + step_distance
+                )
                 came_from[neighbor] = current
-                f_score = tentative_g_cost + octile_heuristic(neighbor, goal)
+
+                f_score = (
+                    tentative_g_cost + octile_heuristic(neighbor, goal)
+                )
                 heapq.heappush(open_set, (f_score, neighbor))
 
     # Open set exhausted without reaching goal -- genuinely unreachable

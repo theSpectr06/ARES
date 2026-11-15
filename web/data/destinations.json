@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "overview_file": "surface-overview.png",
+  "destinations": [
+    {
+      "id": "neretva-vallis-layered-unit",
+      "name": "Neretva Vallis Layered Unit",
+      "mission_file": "destinations/neretva-vallis-layered-unit/mission.json",
+      "route_file": "destinations/neretva-vallis-layered-unit/route.json",
+      "distance_m": 3642.848480983347,
+      "modeled_cost_m_equivalent": 5025.846515416347
+    },
+    {
+      "id": "crater-rim-breccia",
+      "name": "Crater Rim Breccia",
+      "mission_file": "destinations/crater-rim-breccia/mission.json",
+      "route_file": "destinations/crater-rim-breccia/route.json",
+      "distance_m": 1919.7892475429671,
+      "modeled_cost_m_equivalent": 2477.2296215370175
+    },
+    {
+      "id": "crater-rim-layered-unit",
+      "name": "Crater Rim Layered Unit",
+      "mission_file": "destinations/crater-rim-layered-unit/mission.json",
+      "route_file": "destinations/crater-rim-layered-unit/route.json",
+      "distance_m": 2118.104689145496,
+      "modeled_cost_m_equivalent": 2719.09944561121
+    },
+    {
+      "id": "large-aeolian-bedforms",
+      "name": "Large Aeolian Bedforms",
+      "mission_file": "destinations/large-aeolian-bedforms/mission.json",
+      "route_file": "destinations/large-aeolian-bedforms/route.json",
+      "distance_m": 3351.6382361405713,
+      "modeled_cost_m_equivalent": 4308.8106120937955
+    },
+    {
+      "id": "delta-thinly-layered-unit",
+      "name": "Delta Thinly Layered Unit",
+      "mission_file": "destinations/delta-thinly-layered-unit/mission.json",
+      "route_file": "destinations/delta-thinly-layered-unit/route.json",
+      "distance_m": 3680.6429278369974,
+      "modeled_cost_m_equivalent": 4556.429362269611
+    }
+  ]
+}

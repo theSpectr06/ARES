@@ -59,6 +59,21 @@
 
                 <section class="panel-section">
                     <div class="section-heading">
+                        <h3>Science destination</h3>
+                        <span class="section-index">02</span>
+                    </div>
+                    <label class="field-label" for="destination-select">SELECT WAYPOINT</label>
+                    <select id="destination-select" class="destination-select" disabled>
+                        <option value="">Loading destinations…</option>
+                    </select>
+                    <div class="info-block">
+                        <span class="field-label">SELECTED SITE</span>
+                        <span class="field-value" id="destination-name">Loading destination data</span>
+                    </div>
+                </section>
+
+                <section class="panel-section">
+                    <div class="section-heading">
                         <h3>Map layers</h3>
                         <span class="section-index">02</span>
                     </div>
@@ -71,7 +86,7 @@
                         <label class="layer-option">
                             <input id="layer-footprint" type="checkbox" checked>
                             <span class="layer-swatch footprint"></span>
-                            <span>Mission-area footprint</span>
+                            <span>Science destination pins</span>
                         </label>
                         <label class="layer-option">
                             <input id="layer-cost" type="checkbox">
@@ -216,6 +231,41 @@
         </footer>
     </div>
 
+    <dialog id="destination-modal" class="destination-modal">
+        <div class="destination-modal-shell">
+
+            <header class="destination-modal-header">
+                <div class="modal-header-label">ARES / SCIENCE CATALOGUE</div>
+    
+                <button
+                    id="modal-close"
+                    class="modal-close"
+                    type="button"
+                    aria-label="Close destination information"
+                >
+                    &times;
+                </button>
+            </header>
+
+            <div id="destination-modal-content"
+                 class="destination-modal-content">
+            </div>
+
+            <footer class="destination-modal-footer">
+                <span>PRECOMPUTED BASECAMP ROUTE</span>
+    
+                <button
+                    id="modal-route-button"
+                    class="modal-route-button"
+                    type="button"
+                >
+                    Route from basecamp
+                    <span aria-hidden="true">→</span>
+                </button>
+            </footer>
+    
+        </div>
+    </dialog>
     <script src="vendor/leaflet/leaflet.js"></script>
     <script src="js/app.js"></script>
 </body>
