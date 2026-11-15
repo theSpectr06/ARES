@@ -3,269 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b0e13">
+    <meta name="theme-color" content="#0a0d12">
     <meta name="description" content="ARES terrain-aware EVA route planning prototype for Jezero Crater.">
     <title>ARES — Mission Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
     <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
     <div class="app-shell">
-        <header class="topbar">
-            <div class="brand">
-                <div class="brand-mark">A</div>
+
+        <!-- Full-bleed map -->
+        <div class="map-fullscreen" id="map" aria-label="Interactive Jezero Crater terrain map">
+
+            <!-- Cost overlay legend (bottom-right) -->
+            <div id="cost-legend" class="cost-legend" hidden>
+                <div class="cost-legend-title">Traversal cost (normalised)</div>
+                <div class="cost-legend-ramp"></div>
+                <div class="cost-legend-labels">
+                    <span>Low</span>
+                    <span>High</span>
+                </div>
+            </div>
+
+            <!-- Map legend (bottom-left, above routebar) -->
+            <div id="map-legend" class="map-legend" aria-label="Map legend">
+                <div class="legend-row" id="legend-route-row">
+                    <span class="legend-swatch legend-route-swatch" aria-hidden="true"></span>
+                    <span>Planned route</span>
+                </div>
+                <div class="legend-row" id="legend-basecamp-row">
+                    <span class="legend-swatch legend-basecamp-swatch" aria-hidden="true"></span>
+                    <span>Rover basecamp</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-swatch legend-dest-swatch" aria-hidden="true"></span>
+                    <span>Science destination</span>
+                </div>
+            </div>
+
+            <!-- Hint toast -->
+            <div id="map-hint" class="map-hint">Click the outlined footprint to open the mission area</div>
+
+            <!-- Metric grid canvas -->
+        </div>
+
+        <!-- Floating brand pill (top-center) -->
+        <div class="hud-topbar">
+            <div class="hud-brand">
+                <div class="brand-mark" aria-hidden="true">A</div>
                 <div class="brand-text">
-                    <span class="brand-name">ARES</span>
-                    <span class="brand-subtitle">ADVANCED ROUTE EXPLORATION SYSTEM</span>
+                    <span class="brand-name">ARES Mission Planner</span>
+                    <span class="brand-sub">Advanced Route Exploration System</span>
                 </div>
             </div>
-            <div class="mission-context">
-                <span class="status-indicator"></span>
-                <span>JEZERO CRATER</span>
-                <span class="context-divider">/</span>
-                <span class="muted">MARS SURFACE OPERATIONS</span>
-            </div>
-            <div class="system-status">
-                <span class="status-label">SYSTEM</span>
-                <span class="status-value">INITIALIZING</span>
-            </div>
-        </header>
+        </div>
+        <!-- Hidden system status value — still updated by JS, used by routebar -->
+        <span id="system-status-value" style="display:none">Initializing</span>
 
-        <main class="workspace">
-            <aside class="sidebar left-panel">
-                <div class="panel-heading">
-                    <span class="eyebrow">MISSION CONTROL</span>
-                    <h2>Mission planner</h2>
+        <!-- Map view controls (top-right, floating) -->
+        <div class="hud-view-controls" role="group" aria-label="Map view">
+            <button id="view-regional" class="view-btn active" type="button" aria-pressed="true">Regional</button>
+            <button id="view-detail" class="view-btn" type="button" aria-pressed="false">Mission area</button>
+        </div>
+
+        <!-- Left floating panel column -->
+        <aside class="float-panel float-panel--left" aria-label="Mission control">
+
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Mission area</h3>
                 </div>
-
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Mission area</h3>
-                        <span class="section-index">01</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="field-label">REGION</span>
-                        <span class="field-value">Jezero Crater</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="field-label">TERRAIN DATA</span>
-                        <span class="field-value">HiRISE DTM · 1 m/px</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="field-label">IMAGERY</span>
-                        <span class="field-value">HiRISE Orthoimage</span>
-                    </div>
-                </section>
-
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Science destination</h3>
-                        <span class="section-index">02</span>
-                    </div>
-                    <label class="field-label" for="destination-select">SELECT WAYPOINT</label>
-                    <select id="destination-select" class="destination-select" disabled>
-                        <option value="">Loading destinations…</option>
-                    </select>
-                    <div class="info-block">
-                        <span class="field-label">SELECTED SITE</span>
-                        <span class="field-value" id="destination-name">Loading destination data</span>
-                    </div>
-                </section>
-
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Map layers</h3>
-                        <span class="section-index">02</span>
-                    </div>
-                    <div class="layer-list">
-                        <label class="layer-option">
-                            <input id="layer-imagery" type="checkbox" checked>
-                            <span class="layer-swatch imagery"></span>
-                            <span>Surface imagery</span>
-                        </label>
-                        <label class="layer-option">
-                            <input id="layer-footprint" type="checkbox" checked>
-                            <span class="layer-swatch footprint"></span>
-                            <span>Science destination pins</span>
-                        </label>
-                        <label class="layer-option">
-                            <input id="layer-cost" type="checkbox">
-                            <span class="layer-swatch cost"></span>
-                            <span>Traversal cost</span>
-                        </label>
-                        <label class="layer-option">
-                            <input id="layer-route" type="checkbox" checked>
-                            <span class="layer-swatch route"></span>
-                            <span>Planned route</span>
-                        </label>
-                    </div>
-                    <div class="opacity-control" id="cost-opacity-control">
-                        <label for="cost-opacity">
-                            <span>Cost opacity</span>
-                            <output id="cost-opacity-value" for="cost-opacity">72%</output>
-                        </label>
-                        <input id="cost-opacity" type="range" min="10" max="100" value="72" step="1">
-                    </div>
-                    <p class="panel-note">
-                        Cost and route layers are available in the mission-area view.
-                        The footprint marks the detailed crop on the regional map.
-                    </p>
-                </section>
-
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Route planning</h3>
-                        <span class="section-index">03</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="field-label">ROUTE STATUS</span>
-                        <span class="field-value" id="route-status">Loading route data</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="field-label">PATHFINDING</span>
-                        <span class="field-value">A* · 8-connected grid</span>
-                    </div>
-                    <div class="info-block">
-                        <span class="field-label">EXPANDED CELLS</span>
-                        <span class="field-value" id="expanded-cells">—</span>
-                    </div>
-                </section>
-            </aside>
-
-            <section class="map-workspace">
-                <div class="map-toolbar">
-                    <div>
-                        <span class="eyebrow">SURFACE NAVIGATION</span>
-                        <h2 id="map-title">Regional overview</h2>
-                    </div>
-                    <div class="view-controls">
-                        <button id="view-regional" class="view-button active" type="button" aria-pressed="true">REGIONAL</button>
-                        <button id="view-detail" class="view-button" type="button" aria-pressed="false">MISSION AREA</button>
-                    </div>
+                <div class="field-row">
+                    <span class="field-key">Region</span>
+                    <span class="field-val">Jezero Crater</span>
                 </div>
-
-                <div id="map" class="map-container" aria-label="Interactive Jezero Crater terrain map">
-                    <div id="cost-legend" class="cost-legend" hidden>
-                        <div class="legend-title">NORMALIZED TRAVERSAL COST</div>
-                        <div class="legend-gradient"></div>
-                        <div class="legend-labels"><span>LOW</span><span>HIGH</span></div>
-                    </div>
-                    <div id="map-hint" class="map-hint">Click the outlined footprint to open the mission area</div>
+                <div class="field-row">
+                    <span class="field-key">Terrain data</span>
+                    <span class="field-val">HiRISE DTM · 1 m/px</span>
                 </div>
-
-                <div class="map-footer">
-                    <span id="map-coordinate-label">COORDINATE SYSTEM: MARS EQUIRECTANGULAR</span>
-                    <span id="map-coordinate-readout" aria-live="polite">X — · Y —</span>
-                    <span id="map-view-label">REGIONAL IMAGE PIXELS</span>
+                <div class="field-row">
+                    <span class="field-key">Imagery</span>
+                    <span class="field-val">HiRISE Orthoimage</span>
                 </div>
             </section>
 
-            <aside class="sidebar right-panel">
-                <div class="panel-heading">
-                    <span class="eyebrow">TERRAIN ANALYSIS</span>
-                    <h2>Route metrics</h2>
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Science destination</h3>
                 </div>
+                <div class="waypoint-select-wrap">
+                    <svg class="waypoint-select-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="6" r="3"/><path d="M8 2C5.8 2 4 3.8 4 6c0 3.3 4 7.5 4 7.5S12 9.3 12 6c0-2.2-1.8-4-4-4z"/></svg>
+                    <select id="destination-select" class="destination-select" disabled aria-label="Select science waypoint">
+                        <option value="">Loading destinations…</option>
+                    </select>
+                    <svg class="waypoint-select-chevron" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 6 8 10 12 6"/></svg>
+                </div>
+                <span class="field-val" id="destination-name" style="display:none">Loading…</span>
+            </section>
 
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Traversal model</h3>
-                        <span class="section-index">04</span>
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Map layers</h3>
+                </div>
+                <div class="layer-list">
+                    <div class="layer-row" data-layer="layer-imagery">
+                        <span class="layer-swatch swatch-imagery"></span>
+                        <span class="layer-name">Surface imagery</span>
+                        <button class="layer-eye" id="eye-layer-imagery" type="button" aria-label="Toggle surface imagery" aria-pressed="true">
+                            <svg class="eye-icon eye-on" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.2"/></svg>
+                            <svg class="eye-icon eye-off" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 2l12 12M6.5 6.6A2.2 2.2 0 0 0 10.4 9.5M4.2 4.3C2.6 5.3 1 8 1 8s2.5 5 7 5c1.4 0 2.7-.4 3.8-1.1M6.5 3.1A7.6 7.6 0 0 1 8 3c4.5 0 7 5 7 5a13 13 0 0 1-2 2.6"/></svg>
+                        </button>
+                        <input id="layer-imagery" type="checkbox" checked class="layer-checkbox-hidden">
                     </div>
-                    <div class="info-block">
-                        <span class="field-label">COST COMPONENTS</span>
-                        <span class="field-value">Slope + roughness</span>
+                    <div class="layer-row" data-layer="layer-basecamp">
+                        <span class="layer-swatch swatch-basecamp"></span>
+                        <span class="layer-name">Basecamp marker</span>
+                        <button class="layer-eye" id="eye-layer-basecamp" type="button" aria-label="Toggle basecamp marker" aria-pressed="true">
+                            <svg class="eye-icon eye-on" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.2"/></svg>
+                            <svg class="eye-icon eye-off" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 2l12 12M6.5 6.6A2.2 2.2 0 0 0 10.4 9.5M4.2 4.3C2.6 5.3 1 8 1 8s2.5 5 7 5c1.4 0 2.7-.4 3.8-1.1M6.5 3.1A7.6 7.6 0 0 1 8 3c4.5 0 7 5 7 5a13 13 0 0 1-2 2.6"/></svg>
+                        </button>
+                        <input id="layer-basecamp" type="checkbox" checked class="layer-checkbox-hidden">
                     </div>
-                    <div class="info-block">
-                        <span class="field-label">SLOPE LIMIT</span>
-                        <span class="field-value">30°</span>
+                    <div class="layer-row" data-layer="layer-footprint">
+                        <span class="layer-swatch swatch-destination"></span>
+                        <span class="layer-name">Science destinations</span>
+                        <button class="layer-eye" id="eye-layer-footprint" type="button" aria-label="Toggle science destinations" aria-pressed="true">
+                            <svg class="eye-icon eye-on" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.2"/></svg>
+                            <svg class="eye-icon eye-off" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 2l12 12M6.5 6.6A2.2 2.2 0 0 0 10.4 9.5M4.2 4.3C2.6 5.3 1 8 1 8s2.5 5 7 5c1.4 0 2.7-.4 3.8-1.1M6.5 3.1A7.6 7.6 0 0 1 8 3c4.5 0 7 5 7 5a13 13 0 0 1-2 2.6"/></svg>
+                        </button>
+                        <input id="layer-footprint" type="checkbox" checked class="layer-checkbox-hidden">
                     </div>
-                    <div class="info-block">
-                        <span class="field-label">PATHFINDING MODEL</span>
-                        <span class="field-value">Terrain-weighted A*</span>
+                    <div class="layer-row" data-layer="layer-cost">
+                        <span class="layer-swatch swatch-cost"></span>
+                        <span class="layer-name">Traversal cost</span>
+                        <button class="layer-eye" id="eye-layer-cost" type="button" aria-label="Toggle traversal cost" aria-pressed="false">
+                            <svg class="eye-icon eye-on" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.2"/></svg>
+                            <svg class="eye-icon eye-off" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l12 12M6.5 6.6A2.2 2.2 0 0 0 10.4 9.5M4.2 4.3C2.6 5.3 1 8 1 8s2.5 5 7 5c1.4 0 2.7-.4 3.8-1.1M6.5 3.1A7.6 7.6 0 0 1 8 3c4.5 0 7 5 7 5a13 13 0 0 1-2 2.6"/></svg>
+                        </button>
+                        <input id="layer-cost" type="checkbox" class="layer-checkbox-hidden">
                     </div>
-                </section>
+                    <div class="layer-row" data-layer="layer-route">
+                        <span class="layer-swatch swatch-route"></span>
+                        <span class="layer-name">Planned route</span>
+                        <button class="layer-eye" id="eye-layer-route" type="button" aria-label="Toggle planned route" aria-pressed="true">
+                            <svg class="eye-icon eye-on" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.2"/></svg>
+                            <svg class="eye-icon eye-off" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 2l12 12M6.5 6.6A2.2 2.2 0 0 0 10.4 9.5M4.2 4.3C2.6 5.3 1 8 1 8s2.5 5 7 5c1.4 0 2.7-.4 3.8-1.1M6.5 3.1A7.6 7.6 0 0 1 8 3c4.5 0 7 5 7 5a13 13 0 0 1-2 2.6"/></svg>
+                        </button>
+                        <input id="layer-route" type="checkbox" checked class="layer-checkbox-hidden">
+                    </div>
+                    <div class="layer-row" data-layer="layer-grid">
+                        <span class="layer-swatch swatch-grid"></span>
+                        <span class="layer-name">Metric grid</span>
+                        <button class="layer-eye" id="eye-layer-grid" type="button" aria-label="Toggle metric grid" aria-pressed="true">
+                            <svg class="eye-icon eye-on" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2.2"/></svg>
+                            <svg class="eye-icon eye-off" viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M2 2l12 12M6.5 6.6A2.2 2.2 0 0 0 10.4 9.5M4.2 4.3C2.6 5.3 1 8 1 8s2.5 5 7 5c1.4 0 2.7-.4 3.8-1.1M6.5 3.1A7.6 7.6 0 0 1 8 3c4.5 0 7 5 7 5a13 13 0 0 1-2 2.6"/></svg>
+                        </button>
+                        <input id="layer-grid" type="checkbox" checked class="layer-checkbox-hidden">
+                    </div>
+                </div>
+                <div class="opacity-control" id="cost-opacity-control">
+                    <label for="cost-opacity">
+                        <span>Cost opacity</span>
+                        <output id="cost-opacity-value" for="cost-opacity">72%</output>
+                    </label>
+                    <input id="cost-opacity" type="range" min="10" max="100" value="72" step="1">
+                </div>
+                <p class="panel-note">
+                    Cost and route layers activate in mission-area view.
+                </p>
+            </section>
 
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Route profile</h3>
-                        <span class="section-index">05</span>
-                    </div>
-                    <div id="elevation-profile" class="empty-state">
-                        <span class="empty-state-icon">⌁</span>
-                        <span>Loading elevation profile.</span>
-                    </div>
-                </section>
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Route planning</h3>
+                </div>
+                <div class="field-row">
+                    <span class="field-key">Status</span>
+                    <span class="field-val" id="route-status">Loading…</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-key">Pathfinding</span>
+                    <span class="field-val">A* · 8-connected grid</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-key">Nodes expanded</span>
+                    <span class="field-val mono" id="expanded-cells">—</span>
+                </div>
+            </section>
 
-                <section class="panel-section">
-                    <div class="section-heading">
-                        <h3>Mission notes</h3>
-                        <span class="section-index">06</span>
-                    </div>
-                    <p class="panel-note">
-                        Terrain cost represents modelled traversal difficulty. It is not a
-                        complete hazard-detection or astronaut-safety model. Low cost does
-                        not mean hazard-free terrain.
-                    </p>
-                </section>
-            </aside>
-        </main>
+        </aside>
 
+        <!-- Right floating panel column -->
+        <aside class="float-panel float-panel--right" aria-label="Route analysis">
+
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Elevation profile</h3>
+                </div>
+                <div id="elevation-profile" class="empty-state">
+                    <span class="empty-icon" aria-hidden="true">⌁</span>
+                    <span>Load a destination to view the elevation profile.</span>
+                </div>
+            </section>
+
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Traversal model</h3>
+                </div>
+                <div class="field-row">
+                    <span class="field-key">Cost components</span>
+                    <span class="field-val">Slope + roughness</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-key">Slope limit</span>
+                    <span class="field-val mono">30°</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-key">Model</span>
+                    <span class="field-val">Terrain-weighted A*</span>
+                </div>
+            </section>
+
+            <section class="float-card">
+                <div class="section-head">
+                    <h3>Notes</h3>
+                </div>
+                <p class="panel-note">
+                    Terrain cost represents modelled traversal difficulty based on slope
+                    and surface roughness. It is not a hazard-detection or safety-clearance
+                    model. Low cost does not indicate hazard-free terrain.
+                </p>
+            </section>
+
+        </aside>
+
+        <!-- Floating location pill centered above routebar -->
+        <div class="hud-location-bottom">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="location-name">Jezero Crater</span>
+        </div>
+
+        <!-- Route summary bar (floating bottom) -->
         <footer class="routebar">
-            <div class="routebar-heading">
-                <span class="status-indicator"></span>
-                <span>ROUTE SUMMARY</span>
+            <div class="routebar-label">
+                <span>Route summary</span>
             </div>
-            <div class="route-metric">
-                <span class="metric-label">DISTANCE</span>
-                <span class="metric-value" id="metric-distance">— <small>m</small></span>
+            <div class="route-stats">
+                <div class="route-stat">
+                    <span class="stat-label">Route distance</span>
+                    <span class="stat-value mono" id="metric-distance">—</span>
+                </div>
+                <div class="route-stat">
+                    <span class="stat-label">Terrain-cost factor</span>
+                    <span class="stat-value mono" id="metric-cost">—</span>
+                </div>
+                <div class="route-stat">
+                    <span class="stat-label">Route cells</span>
+                    <span class="stat-value mono" id="metric-cells">—</span>
+                </div>
             </div>
-            <div class="route-metric">
-                <span class="metric-label">MODELLED COST</span>
-                <span class="metric-value" id="metric-cost">— <small>m-eq</small></span>
+            <div class="routebar-coords">
+                <span id="map-coordinate-label" class="map-footer-label">Mars equirectangular</span>
+                <span id="map-coordinate-readout" class="map-footer-coords" aria-live="polite">Move cursor over map</span>
+                <span id="map-view-label" class="map-footer-label">Regional pixels</span>
             </div>
-            <div class="route-metric">
-                <span class="metric-label">GRID CELLS</span>
-                <span class="metric-value" id="metric-cells">—</span>
-            </div>
-            <div class="routebar-status" id="routebar-status">AWAITING MAP INITIALIZATION</div>
+            <span class="routebar-status" id="routebar-status">Awaiting map initialisation</span>
         </footer>
+
     </div>
 
+    <!-- Science destination modal -->
     <dialog id="destination-modal" class="destination-modal">
         <div class="destination-modal-shell">
 
-            <header class="destination-modal-header">
-                <div class="modal-header-label">ARES / SCIENCE CATALOGUE</div>
-    
-                <button
-                    id="modal-close"
-                    class="modal-close"
-                    type="button"
-                    aria-label="Close destination information"
-                >
-                    &times;
-                </button>
+            <!-- Sticky header with destination title, quick stats, route button, and close action -->
+            <header class="destination-modal-sticky-header">
+                <div class="modal-sticky-top-row">
+                    <div class="modal-badge-group">
+                        <span class="modal-catalogue-pill">ARES Science Catalogue</span>
+                        <span class="modal-id-pill" id="modal-site-id">Target</span>
+                    </div>
+                    <div class="modal-actions-group">
+                        <button id="modal-route-button" class="modal-route-btn" type="button">
+                            <span>Route from basecamp</span>
+                            <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/>
+                            </svg>
+                        </button>
+                        <button id="modal-close" class="modal-close" type="button" aria-label="Close destination information">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                                <line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-sticky-title-row">
+                    <h2 id="modal-site-title" class="modal-site-title">Destination</h2>
+                    <div class="modal-quick-stats">
+                        <span class="modal-stat-badge modal-stat-geo" id="modal-site-geo">Geological unit</span>
+                        <span class="modal-stat-badge modal-stat-coords" id="modal-site-coords">Coordinates</span>
+                    </div>
+                </div>
             </header>
 
-            <div id="destination-modal-content"
-                 class="destination-modal-content">
-            </div>
+            <div id="destination-modal-content" class="destination-modal-content"></div>
 
-            <footer class="destination-modal-footer">
-                <span>PRECOMPUTED BASECAMP ROUTE</span>
-    
-                <button
-                    id="modal-route-button"
-                    class="modal-route-button"
-                    type="button"
-                >
-                    Route from basecamp
-                    <span aria-hidden="true">→</span>
-                </button>
-            </footer>
-    
         </div>
     </dialog>
+
     <script src="vendor/leaflet/leaflet.js"></script>
     <script src="js/app.js"></script>
 </body>
