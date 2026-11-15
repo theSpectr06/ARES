@@ -1,0 +1,49 @@
+{
+  "destinations": [
+    {
+      "id": "neretva-vallis-layered-unit",
+      "name": "Neretva Vallis Layered Unit",
+      "coordinates": {
+        "longitude_deg": 77.256,
+        "latitude_deg": 18.509
+      },
+      "geological_unit": "Neretva Vallis layered unit"
+    },
+    {
+      "id": "crater-rim-breccia",
+      "name": "Crater Rim Breccia",
+      "coordinates": {
+        "longitude_deg": 77.269,
+        "latitude_deg": 18.445
+      },
+      "geological_unit": "Crater rim breccia"
+    },
+    {
+      "id": "crater-rim-layered-unit",
+      "name": "Crater Rim Layered Unit",
+      "coordinates": {
+        "longitude_deg": 77.260,
+        "latitude_deg": 18.459
+      },
+      "geological_unit": "Crater rim layered unit"
+    },
+    {
+      "id": "large-aeolian-bedforms",
+      "name": "Large Aeolian Bedforms",
+      "coordinates": {
+        "longitude_deg": 77.337,
+        "latitude_deg": 18.433
+      },
+      "geological_unit": "Large aeolian bedforms"
+    },
+    {
+      "id": "delta-thinly-layered-unit",
+      "name": "Delta Thinly Layered Unit",
+      "coordinates": {
+        "longitude_deg": 77.350,
+        "latitude_deg": 18.451
+      },
+      "geological_unit": "Delta thinly layered unit"
+    }
+  ]
+}
