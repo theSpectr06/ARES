@@ -4,14 +4,21 @@ pattern required for a destination like Nili Planum (invalid, with no
 nearby valid cell), and the "nearby valid cell exists but is not silently
 used" case.
 """
+import json
+
 import numpy as np
+import pytest
 import rasterio
 from rasterio.crs import CRS
 from rasterio.transform import from_origin
 
 from ares_pipeline.coordinates import load_georeference
 from ares_pipeline.pathfind import BlockCache
-from ares_pipeline.science_sites import DestinationCandidate, validate_destination
+from ares_pipeline.science_sites import (
+    DestinationCandidate,
+    load_destination_candidates,
+    validate_destination,
+)
 
 MARS_CRS_WKT = (
     'PROJCS["Equirectangular_MARS",GEOGCS["GCS_D_MARS",'
@@ -187,6 +194,48 @@ def test_destination_with_nearby_valid_cell_is_flagged_not_silently_relocated(
     assert "marked INVALID, not silently relocated" in result.rejection_reason
     assert (result.pixel_row, result.pixel_col) == (16, 20)
 
+def test_load_destination_candidates_from_current_catalogue(tmp_path):
+    catalogue = {
+        "schema_version": "1.0",
+        "destinations": [
+            {
+                "id": "site-a",
+                "name": "Site A",
+                "coordinates": {
+                    "longitude_deg": 77.256,
+                    "latitude_deg": 18.509,
+                },
+                "geological_unit": "Test unit",
+                "summary": "Metadata should not affect route loading.",
+            }
+        ],
+    }
+
+    path = tmp_path / "science-sites.json"
+    path.write_text(json.dumps(catalogue), encoding="utf-8")
+
+    candidates = load_destination_candidates(path)
+
+    assert candidates == [
+        DestinationCandidate(
+            id="site-a",
+            name="Site A",
+            longitude_deg=77.256,
+            latitude_deg=18.509,
+            geological_unit="Test unit",
+        )
+    ]
+
+
+def test_load_destination_candidates_rejects_old_catalogue_schema(tmp_path):
+    path = tmp_path / "science-sites.json"
+    path.write_text(
+        json.dumps({"candidates": []}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="missing 'destinations' array"):
+        load_destination_candidates(path)
 
 def test_out_of_bounds_coordinate_is_rejected(tmp_path):
     cost = np.zeros((32, 32))

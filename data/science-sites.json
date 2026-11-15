@@ -1,4 +1,16 @@
 {
+  "schema_version": "1.0",
+  "region": {
+    "name": "Jezero Crater and western inlet region, Mars",
+    "coordinate_convention": "Longitude east-positive, latitude planetocentric; degrees",
+    "geologic_mapping_reference": {
+      "title": "Photogeologic Map of the Perseverance Rover Field Site in Jezero Crater Constructed by the Mars 2020 Science Team",
+      "doi": "10.1007/s11214-020-00739-x",
+      "url": "https://doi.org/10.1007/s11214-020-00739-x",
+      "map_base": "HiRISE orthoimage mosaic at 0.25 m/pixel and HiRISE stereo DTM at 1 m/pixel",
+      "map_scale": "1:5,000"
+    }
+  },
   "destinations": [
     {
       "id": "neretva-vallis-layered-unit",
@@ -7,7 +19,74 @@
         "longitude_deg": 77.256,
         "latitude_deg": 18.509
       },
-      "geological_unit": "Neretva Vallis layered unit"
+      "geological_unit": "Neretva Vallis layered (NV-l)",
+      "summary": "Light- to intermediate-toned layered outcrops with metre-scale fracture-bounded polygonal patterns, exposed intermittently along the walls and floor of Neretva Vallis. The mapped exposures are discontinuous, and their relationship to the valley's fluvial history is not necessarily uniform across the unit.",
+      "scientific_significance": "The central question is whether the layering records sediment deposited by fluvial activity within the inlet channel or older bedrock exposed by incision. The original mapping favoured a lithified fluvial-sediment interpretation for clearly layered valley-floor exposures, while noting that some wall exposures could be older substrate. Later rover investigations of the Bright Angel formation provide a valuable regional comparison: they document laminated mudstones, conglomerates and evidence consistent with fluvio-lacustrine deposition elsewhere along Neretva Vallis. These rover results strengthen the scientific interest of the inlet channel but do not establish the composition or depositional origin of this separate ARES waypoint.",
+      "science_objective": "Inspect bedding, fracture networks, outcrop position and contact relationships. Test whether local morphology is more consistent with channel-deposited sediment or exposed pre-existing bedrock. Compare the orbital interpretation with the separately mapped Bright Angel formation farther along Neretva Vallis, while keeping the two mapped units distinct unless a detailed geological correlation supports combining them.",
+      "evidence": [
+        {
+          "type": "orbital_morphology_and_mapping",
+          "claim": "NV-l is described as light- to intermediate-toned layered outcrop with metre-scale polygonal fractures. Valley-floor exposures were interpreted as likely lithified fluvial deposits, while wall exposures admit an alternative interpretation as older bedrock exposed by erosion. The discontinuous distribution of the exposures is important: the mapped unit should not be treated as a continuous sedimentary blanket across the valley.",
+          "instrument": "HiRISE",
+          "mission": "Mars Reconnaissance Orbiter",
+          "scale_or_resolution": "The mapping study used a 0.25 m/pixel HiRISE orthoimage mosaic and 1 m/pixel stereo DTM base",
+          "spatial_relation": "Published type-locality coordinate for NV-l; the mapped unit occurs as discontinuous outcrops, not a uniform blanket",
+          "confidence": "Published geomorphological mapping; depositional origin remains an interpretation",
+          "source_ids": [
+            "stack2020"
+          ],
+          "evidence_class": "mapped_unit_evidence"
+        },
+        {
+          "type": "rover_geology_context",
+          "claim": "Perseverance investigated the Bright Angel formation at several outcrops along Neretva Vallis. The 2026 study documents laminated mudstones, conglomerates and sedimentary relationships interpreted in a fluvio-lacustrine context. The observations provide a rover-scale comparison for interpreting layered materials in the inlet channel. Stack et al. (2020) had grouped Bright Angel and other light-toned outcrops farther upstream within the broader NV-l mapping unit; the names should not be treated as exact synonyms, and the rover findings should not be transferred directly to this ARES waypoint.",
+          "instrument": "Mastcam-Z, Navcam, SuperCam RMI, SHERLOC WATSON, RIMFAX, with HiRISE context",
+          "mission": "Mars 2020 Perseverance and Mars Reconnaissance Orbiter",
+          "scale_or_resolution": "Rover-scale imaging and subsurface radar; Mastcam-Z facies mapping reported within 85 m (higher-confidence) and 150 m (extended) of the rover traverse",
+          "spatial_relation": "Regional/related Neretva Vallis outcrops; not confirmed to be the exact NV-l type-locality waypoint in this ARES dataset",
+          "confidence": "Direct rover measurements at the Bright Angel/Tuff Cliff/Masonic Temple outcrops; transfer to this separate waypoint is contextual only",
+          "source_ids": [
+            "jones2026",
+            "nature2025"
+          ],
+          "evidence_class": "regional_context"
+        }
+      ],
+      "observations": [
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA26816",
+          "description": "360-degree Neretva Vallis panorama assembled from 217 Mastcam-Z images acquired on sol 1155 (2024-05-20). Useful for examining the broader valley environment, surface appearance and regional context of the inlet channel.",
+          "relation_to_waypoint": "Regional context; do not label as a photograph taken at the ARES marker.",
+          "url": "https://science.nasa.gov/photojournal/nasas-perseverance-views-dust-at-neretva-vallis/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA26816.webp"
+        },
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Navigation Camera",
+          "asset_id": "PIA26372",
+          "description": "View looking back toward the Bright Angel area as the rover departed on sol 1224 (2024-07-30). Provides visual context for the rover-investigated outcrops and the broader Neretva Vallis exploration campaign.",
+          "relation_to_waypoint": "Context for the explored Bright Angel outcrops in Neretva Vallis, not proof of a direct observation at this published NV-l type locality.",
+          "url": "https://science.nasa.gov/photojournal/perseverance-looks-back-at-bright-angel/",
+          "evidence_class": "regional_context"
+        }
+      ],
+      "sources": [
+        "stack2020",
+        "jones2026",
+        "nature2025",
+        "pia26816",
+        "pia26372",
+        "usgs_map",
+        "hirise_trn"
+      ],
+      "mission_route": null,
+      "raster_pixel": {
+        "x": 11746.5,
+        "y": 4686.5
+      }
     },
     {
       "id": "crater-rim-breccia",
@@ -16,16 +95,146 @@
         "longitude_deg": 77.269,
         "latitude_deg": 18.445
       },
-      "geological_unit": "Crater rim breccia"
+      "geological_unit": "Crater rim breccia (Cr-br)",
+      "summary": "Brecciated and disrupted light- and intermediate-toned bedrock exposed on the Nili Planum-facing slope of the Jezero crater rim. The mapped material is characterised by irregular, fragmented exposures and blocks that can be examined in relation to the surrounding crater-rim units.",
+      "scientific_significance": "The published photogeologic interpretation identifies Cr-br as a syn-Isidis or syn-Jezero impact breccia. Its fragmented character makes the site relevant to impact emplacement, crustal excavation, rock fragmentation and mixing. The precise impact relationship remains an interpretive question: the breccia may be associated with the Jezero impact, or it may represent older Isidis-related megabreccia exposed or uplifted during later events. Distinguishing these possibilities would help constrain the sequence of large impacts and the early geological history of the region.",
+      "science_objective": "Characterize the scale and distribution of brecciated textures, clast populations, disrupted bedding and contacts. Examine block size, angularity, sorting and relationships between fragmented and more coherent bedrock. Compare the outcrop with adjacent crater-rim units to evaluate whether the mapped morphology is consistent with impact-related brecciation, while avoiding a definitive assignment to a particular impact event without diagnostic evidence.",
+      "evidence": [
+        {
+          "type": "orbital_morphology_and_mapping",
+          "claim": "Cr-br is mapped as brecciated and disrupted light- to intermediate-toned bedrock on the Nili Planum-facing crater-rim slope. The map authors interpret it as syn-Isidis or syn-Jezero impact breccia. The mapped exposures include blocks with dimensions ranging from roughly 10 m to more than 100 m, providing a range of scales at which fragmentation and block distribution can be examined. The mapped morphology alone does not resolve which impact event produced the breccia.",
+          "instrument": "HiRISE",
+          "mission": "Mars Reconnaissance Orbiter",
+          "scale_or_resolution": "0.25 m/pixel orthoimage mosaic and 1 m/pixel stereo DTM in the mapping study",
+          "spatial_relation": "Published type-locality coordinate; interpretation applies to the mapped unit, not a laboratory-confirmed sample at the waypoint",
+          "confidence": "Mapped morphology and geological interpretation; impact origin and event attribution are not directly sampled at this ARES point",
+          "source_ids": [
+            "stack2020"
+          ],
+          "evidence_class": "mapped_unit_evidence"
+        },
+        {
+          "type": "regional_geologic_context",
+          "claim": "The USGS Jezero–Nili Planum map provides a regional stratigraphic and geomorphic framework for the crater rim and surrounding Noachian highlands. This context is useful for comparing the mapped breccia with adjacent older highland materials and the larger impact-related geological structure of the region.",
+          "instrument": "Orbital image and topographic basemaps integrated by USGS",
+          "mission": "Multiple orbital datasets; see the map pamphlet for source layers",
+          "scale_or_resolution": "Publication scale 1:75,000; mapped region approximately 60 km by 60 km",
+          "spatial_relation": "Regional coverage includes the ARES candidate coordinate",
+          "confidence": "Regional geologic mapping; not a direct rover observation or a direct determination of breccia composition",
+          "source_ids": [
+            "usgs_map"
+          ],
+          "evidence_class": "regional_context"
+        }
+      ],
+      "observations": [
+        {
+          "mission": "Mars Reconnaissance Orbiter / Mars 2020 Perseverance",
+          "instrument": "HiRISE",
+          "asset_id": "PIA26754",
+          "description": "Orbital map showing Perseverance's broad traverse across the Jezero delta, Neretva Vallis and crater rim toward Broom Point. Useful for understanding the wider Northern Rim exploration context and the relationship of the rim region to the rover traverse.",
+          "relation_to_waypoint": "Regional traverse context for the crater-rim region; not a close-up observation of this ARES waypoint.",
+          "url": "https://science.nasa.gov/photojournal/perseverances-trip-to-broom-point/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA26754.webp"
+        },
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA26475",
+          "description": "Mastcam-Z view annotated with the proposed Northern Rim science campaign route. Provides mission-planning context for the broader crater-rim campaign.",
+          "relation_to_waypoint": "Northern Rim campaign context only; does not establish an observation at this ARES waypoint.",
+          "url": "https://science.nasa.gov/photojournal/proposed-route-of-perseverances-northern-rim-science-campaign/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA26475.webp"
+        }
+      ],
+      "sources": [
+        "stack2020",
+        "usgs_map",
+        "hirise_trn",
+        "pia26754",
+        "pia26475"
+      ],
+      "mission_route": null,
+      "raster_pixel": {
+        "x": 12516.5,
+        "y": 8480.5
+      }
     },
     {
       "id": "crater-rim-layered-unit",
       "name": "Crater Rim Layered Unit",
       "coordinates": {
-        "longitude_deg": 77.260,
+        "longitude_deg": 77.26,
         "latitude_deg": 18.459
       },
-      "geological_unit": "Crater rim layered unit"
+      "geological_unit": "Crater rim layered (Cr-l)",
+      "summary": "Light-toned stratified and polygonally fractured bedrock; the mapped unit is locally faulted and disrupted. Its layering and structural features distinguish it from the more fragmented breccia exposures mapped nearby.",
+      "scientific_significance": "The map interprets Cr-l as pre-Jezero/impact basement bedrock of unspecified sedimentary or volcanic origin. The unit therefore offers an opportunity to examine materials that predate Jezero and their subsequent deformation during impact-related events. Its layered structure, polygonal fractures and local faults are observable features, but they do not by themselves establish whether the parent material is sedimentary or volcanic. That uncertainty is scientifically useful: the site can be approached as a test of competing interpretations rather than as an already identified lithology.",
+      "science_objective": "Measure visible layer orientation and continuity, map polygonal fractures and faults, and inspect contacts with brecciated or blocky rim units. Record whether layering is continuous, disrupted, folded or offset, and compare the structural character of the outcrop with nearby Cr-br exposures. Keep the parent-rock origin open unless further spectral or rover-scale evidence constrains it.",
+      "evidence": [
+        {
+          "type": "orbital_morphology_and_mapping",
+          "claim": "Cr-l is described as a light-toned stratified and polygonally fractured unit, occasionally faulted and disrupted. Its mapped interpretation is pre-Jezero/impact basement of unspecified sedimentary or volcanic origin. The combination of layering and structural disruption makes the unit useful for examining the relationship between pre-existing bedrock structure and later impact-related deformation.",
+          "instrument": "HiRISE",
+          "mission": "Mars Reconnaissance Orbiter",
+          "scale_or_resolution": "0.25 m/pixel orthoimage mosaic and 1 m/pixel stereo DTM in the mapping study",
+          "spatial_relation": "Published type-locality coordinate; no direct rover measurement at this candidate waypoint has been verified",
+          "confidence": "Published geological interpretation; lithologic origin remains unresolved",
+          "source_ids": [
+            "stack2020"
+          ],
+          "evidence_class": "mapped_unit_evidence"
+        },
+        {
+          "type": "regional_geologic_context",
+          "claim": "The USGS Jezero–Nili Planum map provides regional context for the crater rim and older highland materials. It supports comparison of the mapped Cr-l exposure with the broader geological framework, but does not independently determine the mineralogy or parent-rock origin of this waypoint.",
+          "instrument": "Orbital image and topographic basemaps integrated by USGS",
+          "mission": "Multiple orbital datasets; see the map pamphlet for source layers",
+          "scale_or_resolution": "Publication scale 1:75,000",
+          "spatial_relation": "Regional coverage includes the ARES candidate coordinate",
+          "confidence": "Regional mapping, not direct mineral identification at the waypoint",
+          "source_ids": [
+            "usgs_map"
+          ],
+          "evidence_class": "regional_context"
+        }
+      ],
+      "observations": [
+        {
+          "mission": "Mars Reconnaissance Orbiter / Mars 2020 Perseverance",
+          "instrument": "HiRISE",
+          "asset_id": "PIA26754",
+          "description": "Orbital map showing Perseverance's broad traverse across the Jezero delta, Neretva Vallis and crater rim toward Broom Point. Useful for regional traverse context and understanding the broader rim exploration campaign.",
+          "relation_to_waypoint": "Regional traverse context for the crater-rim region; not a close-up observation of this ARES waypoint.",
+          "url": "https://science.nasa.gov/photojournal/perseverances-trip-to-broom-point/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA26754.webp"
+        },
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA26475",
+          "description": "Mastcam-Z view annotated with the proposed Northern Rim science campaign route. Provides context for the scientific exploration planned across the broader crater-rim region.",
+          "relation_to_waypoint": "Northern Rim campaign context only; does not establish an observation at this ARES waypoint.",
+          "url": "https://science.nasa.gov/photojournal/proposed-route-of-perseverances-northern-rim-science-campaign/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA26475.webp"
+        }
+      ],
+      "sources": [
+        "stack2020",
+        "usgs_map",
+        "hirise_trn",
+        "pia26754",
+        "pia26475"
+      ],
+      "mission_route": null,
+      "raster_pixel": {
+        "x": 11983.5,
+        "y": 7650.5
+      }
     },
     {
       "id": "large-aeolian-bedforms",
@@ -34,16 +243,335 @@
         "longitude_deg": 77.337,
         "latitude_deg": 18.433
       },
-      "geological_unit": "Large aeolian bedforms"
+      "geological_unit": "Aeolian bedforms, large (Ab-l)",
+      "summary": "Light- to intermediate-toned, generally straight-crested bedforms, commonly trending approximately north–south. Stack et al. (2020) describe lengths from tens to several hundreds of metres, individual widths from less than 1 to roughly 10 metres, and wavelengths commonly from several metres to tens of metres. The mapped unit is interpreted as transverse aeolian ridges (TARs).",
+      "scientific_significance": "The mapped interpretation is transverse aeolian ridges (TARs): generally light-toned, approximately symmetrical bedforms whose crests are oriented broadly perpendicular to the formative dominant wind direction. Stack et al. (2020) note that the large bedforms in Jezero commonly have north–south crest trends and, considering their distribution on the western side of the crater, suggest a dominant easterly wind regime at the regional scale. The map describes no impact craters on these bedforms and interprets this as consistent with relatively young surfaces compared with cratered bedrock units and unconsolidated sediment. These are orbital geomorphic interpretations; they do not establish the grain-size distribution, composition, present-day mobility, or exact wind conditions at this selected type-locality coordinate.",
+      "science_objective": "At the selected type-locality coordinate, document crest orientation, spacing, wavelength, continuity, bifurcation, and relation to local topography. Compare the observed pattern with the mapped TAR interpretation and the regional north–south crest trend. Look for superposition, erosion, dust mantling, or changes in crest form that could help distinguish surface modification. Treat the ARES terrain-cost raster as a slope/roughness-based route-planning model, not as a measurement of sediment mobility, sediment depth, bearing strength, or sinkage risk.",
+      "evidence": [
+        {
+          "type": "orbital_landform_mapping",
+          "evidence_class": "mapped_unit_evidence",
+          "claim": "Stack et al. (2020), section 4.1.1, define the large aeolian bedform unit where light- to intermediate-toned bedforms cover about 80% or more of the mapped surface and the underlying substrate cannot be clearly differentiated at map scale. The bedforms are commonly light-toned at their crests and darker in their troughs, generally straight-crested, and most commonly trend approximately north–south. They range from tens to several hundreds of metres in length, have individual widths of less than 1 to roughly 10 metres, and commonly have wavelengths of several metres to tens of metres. Bifurcations are common; the largest crestlines are generally parallel to sub-parallel. The mapped interpretation is transverse aeolian ridges (TARs).",
+          "instrument": "HiRISE",
+          "mission": "Mars Reconnaissance Orbiter",
+          "scale_or_resolution": "Mapping used a 25 cm/pixel HiRISE orthoimage mosaic and a 1 m/pixel HiRISE stereo digital terrain model.",
+          "spatial_relation": "Published Ab-l type-locality coordinate selected from the two locations listed in Stack et al. (2020), Table 2: 18.433° N, 77.337° E.",
+          "confidence": "Published orbital geomorphic mapping and interpretation. Width and wavelength are distinct measurements. The type-locality designation does not provide in-situ grain-size, composition, sediment-depth, or present-activity measurements.",
+          "source_ids": [
+            "stack2020"
+          ]
+        },
+        {
+          "type": "regional_surface_process_context",
+          "evidence_class": "regional_context",
+          "claim": "A separate Perseverance Mastcam-Z panorama of Neretva Vallis (PIA26335; acquired on sol 1152) shows sand dunes and ripples within the channel, according to NASA/JPL. This is direct rover imagery of aeolian bedforms elsewhere in Jezero and demonstrates that wind-shaped sediment occurs in the broader crater environment. It is not an image of the selected Ab-l type locality and does not establish that the imaged dunes/ripples are the same mapped unit or share its dimensions and properties.",
+          "instrument": "Mastcam-Z",
+          "mission": "Mars 2020 Perseverance",
+          "scale_or_resolution": "Natural-colour rover panorama stitched from 56 Mastcam-Z images.",
+          "spatial_relation": "Neretva Vallis regional context; not the selected Ab-l type-locality coordinate.",
+          "confidence": "NASA/JPL image description explicitly identifies sand dunes and ripples in Neretva Vallis; spatial equivalence with this Ab-l waypoint is not established.",
+          "source_ids": [
+            "pia26335"
+          ]
+        }
+      ],
+      "observations": [
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA26816",
+          "description": "A 360-degree panorama of Neretva Vallis assembled from 217 Mastcam-Z images acquired on sol 1155 (2024-05-20). NASA describes the scene as a wind-swept, dusty vista. It provides broad environmental context, but NASA's description does not identify specific dunes or TARs in this panorama.",
+          "relation_to_waypoint": "Regional landscape context only; not a photograph of the selected Ab-l coordinate and not direct evidence of TAR morphology.",
+          "url": "https://science.nasa.gov/photojournal/nasas-perseverance-views-dust-at-neretva-vallis/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA26816.webp"
+        },
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA26335",
+          "description": "A natural-colour panorama of Neretva Vallis stitched from 56 Mastcam-Z images acquired on sol 1152 (2024-05-17). NASA/JPL describes sand dunes and ripples in the approximately 400 m-wide channel near the centre of the panorama.",
+          "relation_to_waypoint": "Regional aeolian-process context only; this is not the selected Ab-l type locality.",
+          "url": "https://www.jpl.nasa.gov/images/pia26335-perseverances-view-of-neretva-vallis-river-channel/",
+          "evidence_class": "regional_context",
+          "web_asset": null
+        }
+      ],
+      "sources": [
+        "stack2020",
+        "pia26335",
+        "pia26816",
+        "usgs_map",
+        "hirise_trn",
+        "themis"
+      ],
+      "mission_route": null,
+      "raster_pixel": {
+        "x": 16547.5,
+        "y": 9191.5
+      }
     },
     {
       "id": "delta-thinly-layered-unit",
       "name": "Delta Thinly Layered Unit",
       "coordinates": {
-        "longitude_deg": 77.350,
+        "longitude_deg": 77.35,
         "latitude_deg": 18.451
       },
-      "geological_unit": "Delta thinly layered unit"
+      "geological_unit": "Delta thinly layered (D-tnl)",
+      "summary": "A stratified sequence of alternating light- and dark-toned planar bands, each generally less than one metre thick; local deformation is reported. Some layers can be traced over hundreds of metres, making the unit useful for examining the geometry and continuity of fine-scale deltaic stratification.",
+      "scientific_significance": "The photogeologic interpretation is fine-grained prodelta or distal-lacustrine deposits. The site is relevant to sediment settling in standing water, delta evolution and post-depositional deformation. The mapped layering has also been interpreted in the broader context of delta-plain and lake-basin sedimentation, so its precise depositional setting should remain an open question. Alternating tones and thin planar beds are morphological evidence, not direct proof of a particular mineral assemblage, organic compound or biosignature.",
+      "science_objective": "Inspect lamination thickness, continuity, tone contrasts, deformation and contact relationships. Evaluate whether the mapped geometry is consistent with fine-grained distal delta/lake-basin deposition. Look for changes in bed thickness, folding, contortion or truncation that could distinguish depositional structures from later deformation. Identify what additional compositional measurements would discriminate competing explanations.",
+      "evidence": [
+        {
+          "type": "orbital_stratigraphy_and_mapping",
+          "claim": "D-tnl is mapped as alternating light/dark planar bands less than 1 m thick and locally deformed. Some layers are traceable for hundreds of metres, while local folding or contortion complicates their geometry. The published interpretation favours fine-grained prodelta or distal-lacustrine deposits, although the broader depositional setting remains open to comparison with delta-plain and lake-basin interpretations.",
+          "instrument": "HiRISE",
+          "mission": "Mars Reconnaissance Orbiter",
+          "scale_or_resolution": "0.25 m/pixel orthoimage mosaic and 1 m/pixel stereo DTM in the mapping study",
+          "spatial_relation": "Published type-locality coordinate; do not assume all rover-visited delta strata are this mapped subunit",
+          "confidence": "Published geomorphological/stratigraphic interpretation; depositional environment is inferred from orbital morphology",
+          "source_ids": [
+            "stack2020"
+          ],
+          "evidence_class": "mapped_unit_evidence"
+        },
+        {
+          "type": "orbital_spectral_context",
+          "claim": "A CRISM study analysed three targeted VNIR hyperspectral observations over the Jezero deltaic region and modelled carbonate, olivine, phyllosilicate and other mineral endmembers. It reports carbonate-enriched pixels along delta edges and olivine-rich regions in the crater. These regional results motivate further spectral investigation of delta materials, but they do not establish a mineral detection at the D-tnl type-locality pixel without checking the observation footprints and pixel-level data against the ARES coordinate.",
+          "instrument": "CRISM",
+          "mission": "Mars Reconnaissance Orbiter",
+          "product_ids": [
+            "FRT000047A3",
+            "HRL000040FF",
+            "FRT00005C5E"
+          ],
+          "scale_or_resolution": "Targeted visible/near-infrared hyperspectral cubes; use product labels/metadata for the actual per-observation pixel scale",
+          "spatial_relation": "Study region is the Jezero deltaic region; exact intersection with the ARES D-tnl coordinate must be verified in GIS",
+          "confidence": "Published regional spectral modelling; mineral abundance estimates have atmospheric and endmember-model uncertainties",
+          "source_ids": [
+            "zastrow2021",
+            "crism_archive"
+          ],
+          "evidence_class": "spectral_footprint_pending"
+        }
+      ],
+      "observations": [
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA24921",
+          "description": "Large Mastcam-Z panorama of the western Jezero delta assembled from 1,118 frames acquired on sols 466–474 (2022-06-12 through 2022-06-20). Shows sedimentary outcrops and delta-scale context, including the layered landscape investigated by the rover.",
+          "relation_to_waypoint": "Delta context; the image is not documented as a direct observation of the D-tnl type-locality coordinate.",
+          "url": "https://science.nasa.gov/photojournal/detailed-panorama-of-mars-jezero-crater-delta/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA24921.webp"
+        },
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA24924",
+          "description": "Annotated delta image locating the Wildcat Ridge and Skinner Ridge sample sites, acquired on sol 518 (2022-08-04). Useful for rover-ground-truth context and for understanding the sedimentary materials sampled during the delta campaign.",
+          "relation_to_waypoint": "Nearby/region-level rover context only; do not equate the sampled outcrops with D-tnl unless a geologic map overlay establishes that relationship.",
+          "url": "https://science.nasa.gov/photojournal/2-perseverance-sampling-locations-in-jezeros-delta/",
+          "evidence_class": "regional_context",
+          "web_asset": "../assets/science/PIA24924.webp"
+        },
+        {
+          "mission": "Mars 2020 Perseverance",
+          "instrument": "Mastcam-Z",
+          "asset_id": "PIA25673",
+          "description": "Map of Perseverance's Delta Top campaign showing travelled ground and planned science waypoints. Useful for relating rover exploration to the broader delta region.",
+          "relation_to_waypoint": "Regional rover traverse context; not an image of the exact D-tnl outcrop.",
+          "url": "https://science.nasa.gov/photojournal/map-of-perseverances-delta-top-campaign/",
+          "evidence_class": "regional_context"
+        }
+      ],
+      "sources": [
+        "stack2020",
+        "zastrow2021",
+        "crism_archive",
+        "pia24921",
+        "pia24924",
+        "pia25673",
+        "usgs_map",
+        "hirise_trn"
+      ],
+      "mission_route": null,
+      "raster_pixel": {
+        "x": 17317.5,
+        "y": 8124.5
+      }
     }
-  ]
+  ],
+  "source_registry": [
+    {
+      "id": "stack2020",
+      "title": "Photogeologic Map of the Perseverance Rover Field Site in Jezero Crater Constructed by the Mars 2020 Science Team",
+      "year": 2020,
+      "doi": "10.1007/s11214-020-00739-x",
+      "url": "https://doi.org/10.1007/s11214-020-00739-x",
+      "publisher": "Space Science Reviews",
+      "role": "Primary source for the five mapped units, type-locality coordinates, geomorphic descriptions and interpretations. See Figures 11–13 for delta, crater-rim and Neretva examples; use the paper's unit table for the aeolian type locality."
+    },
+    {
+      "id": "usgs_map",
+      "title": "Geologic map of Jezero crater and the Nili Planum region, Mars (SIM 3464)",
+      "year": 2020,
+      "doi": "10.3133/sim3464",
+      "url": "https://www.usgs.gov/maps/geologic-map-jezero-crater-and-nili-planum-region-mars",
+      "publisher": "U.S. Geological Survey",
+      "role": "Regional geological framework and downloadable map resources; 1:75,000 map of approximately 60 km by 60 km."
+    },
+    {
+      "id": "hirise_trn",
+      "title": "Mars Sample Return HiRISE Mosaics for Terrain Relative Navigation",
+      "year": 2025,
+      "doi": "10.5066/P13CPYYU",
+      "url": "https://doi.org/10.5066/P13CPYYU",
+      "download_page": "https://astrogeology.usgs.gov/search/map/mars-sample-return-terrain-relative-navigation-hirise-dtm-mosaic",
+      "publisher": "USGS Astrogeology Science Center / JPL",
+      "role": "ARES high-resolution surface and elevation base. Published extent 77.057–77.380°E, 18.135–18.588°N; 1 m/pixel DTM and orthoimage mosaic originally at 0.25 m/pixel. CC0 release."
+    },
+    {
+      "id": "zastrow2021",
+      "title": "Distinct Carbonate Lithologies in Jezero Crater, Mars",
+      "year": 2021,
+      "doi": "10.1029/2020GL092365",
+      "url": "https://doi.org/10.1029/2020GL092365",
+      "publisher": "Geophysical Research Letters",
+      "role": "CRISM analysis using three Jezero delta-region targeted observations; supports regional mineralogical context, not an unverified site-specific claim."
+    },
+    {
+      "id": "crism_archive",
+      "title": "MRO CRISM PDS Data Archive and Mars Orbital Data Explorer",
+      "url": "https://pds-geosciences.wustl.edu/missions/mro/crism.htm",
+      "search_tool": "https://ode.rsl.wustl.edu/mars/",
+      "publisher": "NASA Planetary Data System Geosciences Node",
+      "role": "Use to inspect/download CRISM MTRDR/TER/TRDR products and verify each observation footprint against ARES destination coordinates. CRISM L data collection ended in 2018; PDS4 LDR/TER migration notices were posted in 2026."
+    },
+    {
+      "id": "themis",
+      "title": "2001 Mars Odyssey THEMIS archive and Image Explorer",
+      "url": "https://ode.rsl.wustl.edu/mars/pagehelp/Content/Missions_Instruments/Mars_Odyssey/THEMIS/Intro.htm",
+      "search_tool": "https://themis-data.mars.asu.edu/",
+      "publisher": "NASA PDS / Arizona State University",
+      "role": "Optional regional visible/thermal context. Nominal visible resolution 18 m/pixel and IR resolution 100 m/pixel; actual spatial summing can change per-product resolution."
+    },
+    {
+      "id": "jones2026",
+      "title": "A Fluvio-Lacustrine Environment Preserved in the Jezero Crater Inlet Channel, Neretva Vallis, Mars",
+      "year": 2026,
+      "doi": "10.1029/2025JE009420",
+      "url": "https://doi.org/10.1029/2025JE009420",
+      "data_repository_doi": "10.5281/zenodo.17790142",
+      "data_repository_url": "https://doi.org/10.5281/zenodo.17790142",
+      "publisher": "Journal of Geophysical Research: Planets",
+      "role": "Recent rover-based Neretva sedimentology study; includes Mastcam-Z, Navcam, SuperCam RMI, SHERLOC WATSON, RIMFAX and HiRISE products. Reports laminated mudstones, conglomerates and fluvio-lacustrine depositional interpretations at investigated Bright Angel-related outcrops. Relevant to the broader channel but not proof of observations at every NV-l type locality."
+    },
+    {
+      "id": "nature2025",
+      "title": "Redox-driven mineral and organic associations in Jezero Crater, Mars",
+      "year": 2025,
+      "doi": "10.1038/s41586-025-09413-0",
+      "url": "https://doi.org/10.1038/s41586-025-09413-0",
+      "publisher": "Nature",
+      "role": "Rover-based mineralogical/organic-carbon study of Bright Angel formation mudstones in Neretva Vallis. Reported vivianite-like and greigite-like phases are interpretations of detected mineral associations; do not attribute them to the five ARES waypoints without spatial evidence."
+    },
+    {
+      "id": "pia26816",
+      "title": "NASA's Perseverance Views Dust at Neretva Vallis (PIA26816)",
+      "year": 2026,
+      "url": "https://science.nasa.gov/photojournal/nasas-perseverance-views-dust-at-neretva-vallis/",
+      "publisher": "NASA/JPL-Caltech/ASU/MSSS",
+      "role": "217-frame Mastcam-Z panorama acquired 2024-05-20 (sol 1155); useful Neretva valley context."
+    },
+    {
+      "id": "pia26335",
+      "title": "Perseverance's View of Neretva Vallis River Channel (PIA26335)",
+      "year": 2024,
+      "url": "https://www.jpl.nasa.gov/images/pia26335-perseverances-view-of-neretva-vallis-river-channel/",
+      "publisher": "NASA/JPL-Caltech/ASU/MSSS",
+      "role": "Mastcam-Z panorama acquired 2024-05-17 (sol 1152). NASA/JPL describes sand dunes and ripples in the approximately 400 m-wide Neretva Vallis channel; regional aeolian context only, not the selected Ab-l type locality."
+    },
+    {
+      "id": "pia26372",
+      "title": "Perseverance Looks Back at Bright Angel (PIA26372)",
+      "year": 2024,
+      "url": "https://science.nasa.gov/photojournal/perseverance-looks-back-at-bright-angel/",
+      "publisher": "NASA/JPL-Caltech",
+      "role": "Navigation-camera context image as Perseverance departed Bright Angel on sol 1224 (2024-07-30)."
+    },
+    {
+      "id": "pia24921",
+      "title": "Detailed Panorama of Mars' Jezero Crater Delta (PIA24921)",
+      "year": 2022,
+      "url": "https://science.nasa.gov/photojournal/detailed-panorama-of-mars-jezero-crater-delta/",
+      "publisher": "NASA/JPL-Caltech/ASU/MSSS",
+      "role": "1,118-frame Mastcam-Z delta panorama from sols 466–474; delta context, not a verified image of the D-tnl type-locality coordinate."
+    },
+    {
+      "id": "pia24924",
+      "title": "2 Perseverance Sampling Locations in Jezero's Delta (PIA24924)",
+      "year": 2022,
+      "url": "https://science.nasa.gov/photojournal/2-perseverance-sampling-locations-in-jezeros-delta/",
+      "publisher": "NASA/JPL-Caltech/ASU/MSSS",
+      "role": "Mastcam-Z annotated image of Wildcat Ridge and Skinner Ridge sample sites acquired 2022-08-04 (sol 518); rover-ground-truth context in the delta."
+    },
+    {
+      "id": "pia25673",
+      "title": "Map of Perseverance's Delta Top Campaign (PIA25673)",
+      "year": 2022,
+      "url": "https://science.nasa.gov/photojournal/map-of-perseverances-delta-top-campaign/",
+      "publisher": "NASA/JPL-Caltech",
+      "role": "Delta traverse overview showing past rover travel and planned science waypoints; use as regional route context only."
+    },
+    {
+      "id": "pia26754",
+      "title": "Perseverance's Trip to Broom Point (PIA26754)",
+      "year": 2026,
+      "url": "https://science.nasa.gov/photojournal/perseverances-trip-to-broom-point/",
+      "publisher": "NASA/JPL-Caltech/MRO/HiRISE/UA/ICL",
+      "role": "HiRISE orbital route map showing Perseverance's broad traverse across the delta, Neretva Vallis and crater rim to Broom Point. Regional context, not a close-up of the selected rim points."
+    },
+    {
+      "id": "pia26475",
+      "title": "Proposed Route of Perseverance's Northern Rim Science Campaign (PIA26475)",
+      "year": 2024,
+      "url": "https://science.nasa.gov/photojournal/proposed-route-of-perseverances-northern-rim-science-campaign/",
+      "publisher": "NASA/JPL-Caltech/ASU/MSSS",
+      "role": "Mastcam-Z view with proposed Northern Rim science traverse; regional context only."
+    },
+    {
+      "id": "perseverance_archive",
+      "title": "Mars Perseverance Raw Images",
+      "url": "https://mars.nasa.gov/mars2020/multimedia/raw-images/",
+      "publisher": "NASA/JPL",
+      "role": "Searchable raw-image gallery with filters for sol, instrument and image type. Use exact sol ranges and camera filters rather than generic keyword-only browsing."
+    },
+    {
+      "id": "mastcamz_archive",
+      "title": "Mastcam-Z calibrated data and PDS archive guide",
+      "url": "https://mastcamz.asu.edu/mastcam-z-data-for-all/",
+      "pds_bundle_doi": "10.17189/q3ts-c749",
+      "pds_bundle_url": "https://doi.org/10.17189/q3ts-c749",
+      "publisher": "Arizona State University / NASA PDS",
+      "role": "Calibrated radiance (RAD) and radiance-factor (IOF) Mastcam-Z products; use calibrated products for analysis and the NASA image gallery for easy-to-browse public images."
+    }
+  ],
+  "collection_policy": {
+    "evidence_labels": [
+      "direct_waypoint_observation",
+      "mapped_unit_evidence",
+      "regional_context",
+      "spectral_footprint_pending"
+    ],
+    "rules": [
+      "Do not describe a rover image as being taken at a destination unless its location or viewshed is verified against the destination coordinate.",
+      "Do not infer CRISM or THEMIS coverage from regional relevance; overlay the actual product footprint before displaying a site-specific mineral or thermal claim.",
+      "Record mission, instrument, product or image ID, acquisition sol/date, processing level, resolution, footprint, source URL and the relationship to the destination.",
+      "Keep orbital spectral detections, geomorphic interpretations and rover-confirmed observations as separate evidence classes.",
+      "Do not interpret the terrain-cost raster as a certified safety, mobility, bearing-strength or sand-sinkage model."
+    ]
+  }
 }

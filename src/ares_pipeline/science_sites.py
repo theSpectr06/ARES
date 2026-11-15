@@ -177,7 +177,22 @@ def _find_nearest_passable_cell(
 
 
 def load_destination_candidates(path: Path) -> list[DestinationCandidate]:
-    """Load the raw candidate list (id, name, lon, lat, unit) prior to validation."""
-    with open(path) as f:
-        raw = json.load(f)
-    return [DestinationCandidate(**entry) for entry in raw["candidates"]]
+    """Load destination candidates from the current science-sites catalogue."""
+    with path.open(encoding="utf-8") as f:
+        data = json.load(f)
+
+    if "destinations" not in data:
+        raise ValueError(
+            "Invalid science-sites catalogue: missing 'destinations' array."
+        )
+
+    return [
+        DestinationCandidate(
+            id=entry["id"],
+            name=entry["name"],
+            longitude_deg=entry["coordinates"]["longitude_deg"],
+            latitude_deg=entry["coordinates"]["latitude_deg"],
+            geological_unit=entry["geological_unit"],
+        )
+        for entry in data["destinations"]
+    ]
